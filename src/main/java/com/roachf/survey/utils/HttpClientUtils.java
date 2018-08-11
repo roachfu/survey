@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.httpclient.HttpStatus;
@@ -20,9 +21,12 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
  * @author roach
  *
  */
+
+@Slf4j
 public class HttpClientUtils {
 
 	private static final String UTF_8 = "UTF-8";
+	private static final String APPLICATION_JSON = "application/json";
 	
 
 	/**
@@ -134,9 +138,9 @@ public class HttpClientUtils {
 
 		String result = null;
 		try {
-			requestMethod.setRequestHeader("Content-Type", "application/json");
+			requestMethod.setRequestHeader("Content-Type", APPLICATION_JSON);
 			if (params != null) {
-				requestMethod.setRequestEntity(new StringRequestEntity(params, "application/json", charset));
+				requestMethod.setRequestEntity(new StringRequestEntity(params, APPLICATION_JSON, charset));
 			}
 
 			HttpClient client = new HttpClient();
@@ -146,8 +150,8 @@ public class HttpClientUtils {
 			}
 			byte[] bytes = readInputStream(requestMethod.getResponseBodyAsStream());
 			result = new String(bytes, charset);
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			log.error("IO异常：", e);
 		} finally {
 			requestMethod.releaseConnection();
 		}
@@ -163,7 +167,7 @@ public class HttpClientUtils {
 	 */
 	private static String returnResult(HttpMethodBase requestMethod, String charset) {
 
-		requestMethod.setRequestHeader("Content-Type", "application/json");
+		requestMethod.setRequestHeader("Content-Type", APPLICATION_JSON);
 
 		String result = null;
 		try {
@@ -174,8 +178,8 @@ public class HttpClientUtils {
 			}
 			byte[] bytes = readInputStream(requestMethod.getResponseBodyAsStream());
 			result = new String(bytes, charset);
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			log.error("IO异常：", e);
 		} finally {
 			requestMethod.releaseConnection();
 		}
@@ -199,30 +203,6 @@ public class HttpClientUtils {
 
 	}
 
-	public static void main(String[] args) {
-		
-
-		String url = "http://localhost:8080/springMVC_study/users";
-
-		// 获取列表
-		System.out.println(httpGetRequest(url));
-
-		// 获取1001用户详情
-		//System.out.println(httpGetRequest(url + "/1001"));
-
-		// 删除1001
-		//System.out.println(httpDeleteRequest(url + "/1001"));
-
-		// 增加一个用户
-		//String user = "{\"name\":\"lim\", \"email\":\"lim@qq.com\", \"birth\":\"2015-11-03\"}";
-		//System.out.println(httpPostRequest(url, user));
-
-		// 修改1004用户
-		//String user4 = "{\"id\":1004, \"name\":\"lim\", \"email\":\"lim@qq.com\", \"birth\":\"2015-11-03\"}";
-		//System.out.println(httpPutRequest(url, user4));
-		
-	}
-	
 	public enum HttpMethod{
 		POST, GET, PUT, DELETE
 	}

@@ -1,5 +1,7 @@
 package com.roachf.survey.utils.mail;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -17,6 +19,13 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+/**
+ * 邮件工具类
+ *
+ * @author roach
+ */
+
+@Slf4j
 public class JavaMailUtils {
 	
 	/**
@@ -49,6 +58,7 @@ public class JavaMailUtils {
 
 		Session session = Session.getInstance(props,
 		  new javax.mail.Authenticator() {
+			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(javaMail.getUsername(), javaMail.getPassword());
 			}
@@ -64,7 +74,7 @@ public class JavaMailUtils {
 			
 			// 抄送邮箱: 可抄送多个用户 
 			if (javaMail.getCcMails() != null && javaMail.getCcMails().length > 0) {
-				StringBuffer cc = new StringBuffer(javaMail.getCcMails()[0]);
+				StringBuilder cc = new StringBuilder(javaMail.getCcMails()[0]);
 				for (int i = 1; i < javaMail.getCcMails().length; i++) {
 					cc.append(",").append(javaMail.getCcMails()[i]);
 				}
@@ -72,7 +82,7 @@ public class JavaMailUtils {
 			}
 			// 密送邮箱：可密送多个用户 
 			if (javaMail.getBccMails() != null && javaMail.getBccMails().length > 0) {
-				StringBuffer bcc = new StringBuffer(javaMail.getBccMails()[0]);
+				StringBuilder bcc = new StringBuilder(javaMail.getBccMails()[0]);
 				for (int i = 1; i < javaMail.getBccMails().length; i++) {
 					bcc.append(",").append(javaMail.getBccMails()[i]);
 				}
@@ -89,7 +99,7 @@ public class JavaMailUtils {
 			if(isHtml){
 				bodyPart.setContent(javaMail.getContent(), "text/html;charset=UTF-8");
 			}else{
-				bodyPart.setText(javaMail.getContent());;
+				bodyPart.setText(javaMail.getContent());
 			}
 			multipart.addBodyPart(bodyPart);
 			
@@ -110,33 +120,8 @@ public class JavaMailUtils {
 
 		} catch (MessagingException e) {
 			flag = false;
-			e.printStackTrace();
+			log.error("消息异常：", e);
 		}
 		return flag;
-	}
-	
-	
-	private static String html(){
-		return "<!DOCTYPE html>" +
-			"<html lang='en'>" +
-			"<head>" +
-			    "<meta charset='UTF-8'>" +
-			    "<title>test</title>" +
-			"</head>" +
-			"<body>" +
-			    "<div style='color: red; text-align: center'>" +
-			        "<h1>Hello World</h1>" +
-			    "</div>" +
-			"</body>" +
-			"</html>";
-	}
-	
-	public static void main(String[] args) {
-		JavaMail javamail = new JavaMail();
-		javamail.setSubject("test");
-		javamail.setContent(html());
-		javamail.setToMail("456789@qq.com");
-		javamail.setAttachments(new String[]{"D:\\123456.docx","D:\\BugReport.txt"});
-		System.out.println(sendMail(javamail, true));
 	}
 }
