@@ -14,7 +14,7 @@
 
     <appender name="DEBUG" class="org.apache.log4j.DailyRollingFileAppender">
         <param name="ImmediateFlush" value="true" />
-        <param name="File" value="D:\\log/debug.log4j" />
+        <param name="File" value="log/debug.log4j" />
         <param name="DatePattern" value="'.'yyyy-MM-dd'.txt'" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%-5p [%t] [%c] [line:%L] [%d{yyyy-MM-dd HH:mm:ss}] - %m%n" />
@@ -27,7 +27,7 @@
     
     <appender name="INFO" class="org.apache.log4j.DailyRollingFileAppender">
         <param name="ImmediateFlush" value="true" />
-        <param name="File" value="D:\\log/info.log4j" />
+        <param name="File" value="log/info.log4j" />
         <param name="DatePattern" value="'.'yyyy-MM-dd'.txt'" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%-5p [%t] [%c] [line:%L] [%d{yyyy-MM-dd HH:mm:ss}] - %m%n" />
