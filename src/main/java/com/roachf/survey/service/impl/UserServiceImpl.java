@@ -8,6 +8,11 @@ import com.roachf.survey.pojo.entity.User;
 import com.roachf.survey.service.UserService;
 import com.roachf.survey.utils.cryptology.MD5Utils;
 
+/**
+ * 用户服务
+ *
+ * @author roach
+ */
 @Service("userService")
 public class UserServiceImpl extends BaseServiceImpl<User, Integer> implements UserService{
 
@@ -15,7 +20,6 @@ public class UserServiceImpl extends BaseServiceImpl<User, Integer> implements U
 
 	@Autowired
 	public void setUserDao(UserDao userDao) {
-//		super.setBaseDao(userDao);
 		this.userDao = userDao;
 	}
 	
@@ -32,7 +36,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Integer> implements U
 	@Override
 	public boolean isRegisted(String statement, String email) {
 		Integer count = (Integer)userDao.getObject(statement, email);
-		return count > 0 ? true : false;
+		return count > 0;
 	}
 
 }
